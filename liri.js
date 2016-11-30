@@ -11,10 +11,10 @@ chooseCommand(liriCommand, secondArgument);
 function chooseCommand(command, argument){
     switch (command){
         case "spotify-this-song":
-            spotify(argument);
+            getSong(argument);
             break;
         case "movie-this":
-            movie(argument);
+            getMovie(argument);
             break;
         case "my-tweets":
             getTweets();
@@ -25,7 +25,7 @@ function chooseCommand(command, argument){
     }
 }
 
-function spotify(songTitle){
+function getSong(songTitle){
     if (!songTitle){
         songTitle = "The Sign";
     }
@@ -39,7 +39,7 @@ function spotify(songTitle){
     });
 }
 
-function movie(movieTitle){
+function getMovie(movieTitle){
     if (!movieTitle){
         movieTitle = "Mr. Nobody";
     }
