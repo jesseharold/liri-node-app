@@ -35,10 +35,11 @@ function getSong(songTitle){
             console.log('Error getting spotify: ' + error);
             return;
         }
-        console.log("Artist: " + data.tracks.items[0].artists[0].name);
-        console.log("Song Name: " + data.tracks.items[0].name);
-        console.log("Spotify Preview: " + data.tracks.items[0].preview_url);
-        console.log("On Album: " + data.tracks.items[0].album.name);
+        var songInfo = data.tracks.items[0];
+        console.log("Artist: " + songInfo.artists[0].name);
+        console.log("Song Name: " + songInfo.name);
+        console.log("Spotify Preview: " + songInfo.preview_url);
+        console.log("On Album: " + songInfo.album.name);
     });
 }
 
