@@ -27,15 +27,18 @@ function chooseCommand(command, argument){
 
 function getSong(songTitle){
     if (!songTitle){
-        songTitle = "The Sign";
+        songTitle = "The Sign Ace of Base";
     }
     console.log("spotify: " + songTitle);
-    spotify.search({ type: 'track', query: songTitle }, function(error, data) {
+    spotify.search({ type: 'track', query: songTitle, limit: 1 }, function(error, data) {
         if (error) {
             console.log('Error getting spotify: ' + error);
             return;
         }
-        console.log(data);
+        console.log("Artist: " + data.tracks.items[0].artists[0].name);
+        console.log("Song Name: " + data.tracks.items[0].name);
+        console.log("Spotify Preview: " + data.tracks.items[0].preview_url);
+        console.log("On Album: " + data.tracks.items[0].album.name);
     });
 }
 
