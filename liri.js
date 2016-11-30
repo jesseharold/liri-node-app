@@ -50,23 +50,30 @@ function getMovie(movieTitle){
         movieTitle = "Mr. Nobody";
     }
     var queryURL = "http://www.omdbapi.com/";
-    var options = {t: movieTitle, type: "movie", plot: "short", r: "json", v:"1"};
+    var options = {
+        t: movieTitle, 
+        type: "movie", 
+        plot: "short", 
+        tomatoes: true,
+        r: "json", 
+        v:"1"
+    };
     //console.log("movie: " + movieTitle);
     request.get({uri: queryURL, qs: options}, function(error, data){
         if (error){
             console.log("Error getting from OMDB: " + error);
             return;
         }
-        console.log(data.body);
-        console.log("Movie Title: " + data.body["Title"]);
-        console.log("Release Year: " + data.body["Year"]);
-        console.log("Rated: " + data.body["Rated"]);
-        console.log("Country of Origin: " + data.body["Country"]);
-        console.log("Languages: " + data.body["Language"]);
-        console.log("Plot: " + data.body["Plot"]);
-        console.log("Actors: " + data.body["Actors"]);
-        console.log("Rotten Tomatoes Rating: " + data.body["tomatoMeter"]);
-        console.log("More Info: " + data.body["tomatoURL"]);
+        var movieInfo = JSON.parse(data.body);
+        console.log("Movie Title: " + movieInfo["Title"]);
+        console.log("Release Year: " + movieInfo["Year"]);
+        console.log("Rated: " + movieInfo["Rated"]);
+        console.log("Country of Origin: " + movieInfo["Country"]);
+        console.log("Languages: " + movieInfo["Language"]);
+        console.log("Plot: " + movieInfo["Plot"]);
+        console.log("Actors: " + movieInfo["Actors"]);
+        console.log("Rotten Tomatoes Rating: " + movieInfo["tomatoMeter"]);
+        console.log("More Info: " + movieInfo["tomatoURL"]);
     })
 }
 
