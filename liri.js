@@ -33,14 +33,15 @@ function getSong(songTitle){
     //console.log("spotify: " + songTitle);
     spotify.search({ type: "track", query: songTitle, limit: 1 }, function(error, data) {
         if (error) {
-            console.log("Error getting spotify: " + error);
+           output("Error getting spotify: " + error);
             return;
         }
         var songInfo = data.tracks.items[0];
-        console.log("Artist: " + songInfo.artists[0].name);
-        console.log("Song Name: " + songInfo.name);
-        console.log("Spotify Preview: " + songInfo.preview_url);
-        console.log("On Album: " + songInfo.album.name);
+       output("Artist: " + songInfo.artists[0].name);
+       output("Song Name: " + songInfo.name);
+       output("Spotify Preview: " + songInfo.preview_url);
+       output("On Album: " + songInfo.album.name);
+       output("--------------------------");
     });
 }
 
@@ -61,20 +62,21 @@ function getMovie(movieTitle){
     //console.log("movie: " + movieTitle);
     request.get({uri: queryURL, qs: options}, function(error, data){
         if (error){
-            console.log("Error getting from OMDB: " + error);
+           output("Error getting from OMDB: " + error);
             return;
         }
         var movieInfo = JSON.parse(data.body);
-        console.log("Movie Title: " + movieInfo["Title"]);
-        console.log("Release Year: " + movieInfo["Year"]);
-        console.log("Rated: " + movieInfo["Rated"]);
-        console.log("Country of Origin: " + movieInfo["Country"]);
-        console.log("Languages: " + movieInfo["Language"]);
-        console.log("Plot: " + movieInfo["Plot"]);
-        console.log("Actors: " + movieInfo["Actors"]);
-        console.log("Rotten Tomatoes Rating: " + movieInfo["tomatoMeter"]);
-        console.log("More Info: " + movieInfo["tomatoURL"]);
-    })
+       output("Movie Title: " + movieInfo["Title"]);
+       output("Release Year: " + movieInfo["Year"]);
+       output("Rated: " + movieInfo["Rated"]);
+       output("Country of Origin: " + movieInfo["Country"]);
+       output("Languages: " + movieInfo["Language"]);
+       output("Plot: " + movieInfo["Plot"]);
+       output("Actors: " + movieInfo["Actors"]);
+       output("Rotten Tomatoes Rating: " + movieInfo["tomatoMeter"]);
+       output("More Info: " + movieInfo["tomatoURL"]);
+       output("--------------------------");
+    });
 }
 
 function getTweets(){
@@ -86,9 +88,10 @@ function getTweets(){
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         if (!error) {
             for (var i = 0; i < tweets.length; i++){
-                console.log(tweets[i].text);
-                console.log(tweets[i].created_at);
+               output(tweets[i].text);
+               output(tweets[i].created_at);
             }
+            output("--------------------------");
         }
     });
 }
@@ -96,11 +99,16 @@ function getTweets(){
 function readRandomTxt(){
     fs.readFile("random.txt", "utf8", function(error, data){
         if (error){
-            console.log("Error reading random.txt: " + error);
+           output("Error reading random.txt: " + error);
         }
         var randomData = data.split(",");
         var randomCommand = randomData[0];
         var randomArgument = randomData[1];
         chooseCommand(randomCommand, randomArgument);
     });
+}
+
+function output(text){
+    console.log(text);
+    fs.appendFile("log.txt", text + "\n");
 }
