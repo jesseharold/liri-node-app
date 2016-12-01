@@ -23,7 +23,7 @@ function chooseCommand(command, argument){
             readRandomTxt();
             break;
         default:
-            output("Unknown Command, try one of these: 'spotify-this-song', 'movie-this', 'my-tweets', 'do-what-it-says'");
+            console.log("Unknown Command, try one of these: 'spotify-this-song', 'movie-this', 'my-tweets', 'do-what-it-says'");
     }
 }
 
@@ -35,19 +35,17 @@ function getSong(songTitle){
     //console.log("spotify: " + songTitle);
     spotify.search({ type: "track", query: songTitle, limit: 1 }, function(error, data) {
         if (error) {
-           output("Error getting spotify: " + error);
+           console.log("Error getting spotify: " + error);
             return;
         }
-        if (data.responseCode !== 200){
-            output("Response from spotify: " + data.responseCode);
-        } else {
-            var songInfo = data.tracks.items[0];
-            output("Artist: " + songInfo.artists[0].name);
-            output("Song Name: " + songInfo.name);
-            output("Spotify Preview: " + songInfo.preview_url);
-            output("On Album: " + songInfo.album.name);
-            output("--------------------------");
-        }
+        var songInfo = data.tracks.items[0];
+        var outputText = "";
+        outputText += "Artist: " + songInfo.artists[0].name + "\n";
+        outputText += "Song Name: " + songInfo.name + "\n";
+        outputText += "Spotify Preview: " + songInfo.preview_url + "\n";
+        outputText += "On Album: " + songInfo.album.name + "\n";
+        outputText += "--------------------------\n";
+        output(outputText);
     });
 }
 
@@ -63,28 +61,30 @@ function getMovie(movieTitle){
         plot: "short", 
         tomatoes: true,
         r: "json", 
-        v:"1"
+        v: "1"
     };
     //console.log("movie: " + movieTitle);
     request.get({uri: queryURL, qs: options}, function(error, data){
         if (error){
-           output("Error getting from OMDB: " + error);
+           console.log("Error getting from OMDB: " + error);
             return;
         }
-        if (data.responseCode !== 200){
-            output("Response from omdb: " + data.responseCode);
+        if (data.statusCode  !== 200){
+            console.log("Response from omdb: " + data.statusCode );
         } else {
             var movieInfo = JSON.parse(data.body);
-            output("Movie Title: " + movieInfo["Title"]);
-            output("Release Year: " + movieInfo["Year"]);
-            output("Rated: " + movieInfo["Rated"]);
-            output("Country of Origin: " + movieInfo["Country"]);
-            output("Languages: " + movieInfo["Language"]);
-            output("Plot: " + movieInfo["Plot"]);
-            output("Actors: " + movieInfo["Actors"]);
-            output("Rotten Tomatoes Rating: " + movieInfo["tomatoMeter"]);
-            output("More Info: " + movieInfo["tomatoURL"]);
-            output("--------------------------");
+            var outputText = "";
+            outputText += "Movie Title: " + movieInfo["Title"] + "\n";
+            outputText += "Release Year: " + movieInfo["Year"] + "\n";
+            outputText += "Rated: " + movieInfo["Rated"] + "\n";
+            outputText += "Country of Origin: " + movieInfo["Country"] + "\n";
+            outputText += "Languages: " + movieInfo["Language"] + "\n";
+            outputText += "Plot: " + movieInfo["Plot"] + "\n";
+            outputText += "Actors: " + movieInfo["Actors"] + "\n";
+            outputText += "Rotten Tomatoes Rating: " + movieInfo["tomatoMeter"] + "\n";
+            outputText += "More Info: " + movieInfo["tomatoURL"] + "\n";
+            outputText += "--------------------------\n";
+            output(outputText);
         }
     });
 }
@@ -93,21 +93,24 @@ function getTweets(){
     //console.log("getTweets");
     var client = new twitter(keys.twitterKeys);
     var params = {
-        screen_name: 'haroldthesquare'
+        screen_name: 'haroldthesquare',
+        count: 20
     };
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         if (error) {
-            output("Error getting from twitter: " + error);
+            console.log("Error getting from twitter: " + error);
             return;
         }
-        if (response.responseCode !== 200){
-            output("Response from twitter: " + response.responseCode);
+        if (response.statusCode !== 200){
+            console.log("Response from twitter: " + response.statusCode);
         } else {
+            var outputText = "";
             for (var i = 0; i < tweets.length; i++){
-                output(tweets[i].text);
-                output(tweets[i].created_at);
+                outputText += tweets[i].text + "\n";
+                outputText += " - " + tweets[i].created_at + "\n";
             }
-            output("--------------------------");
+            outputText += "--------------------------\n";
+            output(outputText);
         }
     });
 }
@@ -115,7 +118,7 @@ function getTweets(){
 function readRandomTxt(){
     fs.readFile("random.txt", "utf8", function(error, data){
         if (error){
-           output("Error reading random.txt: " + error);
+           console.log("Error reading random.txt: " + error);
         }
         var randomData = data.split(",");
         var randomCommand = randomData[0];
