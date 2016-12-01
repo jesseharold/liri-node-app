@@ -1,9 +1,11 @@
 var liriCommand = process.argv[2];
-var secondArgument = process.argv[3];
+// any words after the first get made into the song/movie title
+var secondArgument = process.argv.slice(3, process.argv.length).join(" ");
 var fs = require("fs");
 var twitter = require("twitter");
 var spotify = require("spotify");
 var request = require("request");
+// keep keys private
 var keys = require("./keys.js");
 
 chooseCommand(liriCommand, secondArgument);
@@ -33,14 +35,18 @@ function getSong(songTitle){
         songTitle = "The Sign Ace of Base";
     }
     //console.log("spotify: " + songTitle);
-    spotify.search({ type: "track", query: songTitle, limit: 1 }, function(error, data) {
+    var options = {
+        type: "track", 
+        query: songTitle, 
+        limit: 1
+    };
+    spotify.search(options, function(error, data) {
         if (error) {
-           console.log("Error getting spotify: " + error);
+            console.log("Error getting spotify: " + error);
             return;
         }
         var songInfo = data.tracks.items[0];
-        var outputText = "";
-        outputText += "Artist: " + songInfo.artists[0].name + "\n";
+        var outputText = "Artist: " + songInfo.artists[0].name + "\n";
         outputText += "Song Name: " + songInfo.name + "\n";
         outputText += "Spotify Preview: " + songInfo.preview_url + "\n";
         outputText += "On Album: " + songInfo.album.name + "\n";
@@ -66,15 +72,14 @@ function getMovie(movieTitle){
     //console.log("movie: " + movieTitle);
     request.get({uri: queryURL, qs: options}, function(error, data){
         if (error){
-           console.log("Error getting from OMDB: " + error);
+            console.log("Error getting from OMDB: " + error);
             return;
         }
-        if (data.statusCode  !== 200){
+        if (data.statusCode !== 200){
             console.log("Response from omdb: " + data.statusCode );
         } else {
             var movieInfo = JSON.parse(data.body);
-            var outputText = "";
-            outputText += "Movie Title: " + movieInfo["Title"] + "\n";
+            var outputText = "Movie Title: " + movieInfo["Title"] + "\n";
             outputText += "Release Year: " + movieInfo["Year"] + "\n";
             outputText += "Rated: " + movieInfo["Rated"] + "\n";
             outputText += "Country of Origin: " + movieInfo["Country"] + "\n";
@@ -92,11 +97,11 @@ function getMovie(movieTitle){
 function getTweets(){
     //console.log("getTweets");
     var client = new twitter(keys.twitterKeys);
-    var params = {
+    var options = {
         screen_name: 'haroldthesquare',
         count: 20
     };
-    client.get('statuses/user_timeline', params, function(error, tweets, response) {
+    client.get('statuses/user_timeline', options, function(error, tweets, response) {
         if (error) {
             console.log("Error getting from twitter: " + error);
             return;
@@ -119,6 +124,7 @@ function readRandomTxt(){
     fs.readFile("random.txt", "utf8", function(error, data){
         if (error){
            console.log("Error reading random.txt: " + error);
+           return;
         }
         var randomData = data.split(",");
         var randomCommand = randomData[0];
