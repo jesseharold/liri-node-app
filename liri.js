@@ -77,15 +77,15 @@ function getMovie(movieTitle){
             console.log("Response from omdb: " + data.statusCode );
         } else {
             var movieInfo = JSON.parse(data.body);
-            var outputText = "Movie Title: " + movieInfo["Title"] + "\n";
-            outputText += "Release Year: " + movieInfo["Year"] + "\n";
-            outputText += "Rated: " + movieInfo["Rated"] + "\n";
-            outputText += "Country of Origin: " + movieInfo["Country"] + "\n";
-            outputText += "Languages: " + movieInfo["Language"] + "\n";
-            outputText += "Plot: " + movieInfo["Plot"] + "\n";
-            outputText += "Actors: " + movieInfo["Actors"] + "\n";
-            outputText += "Rotten Tomatoes Rating: " + movieInfo["tomatoMeter"] + "\n";
-            outputText += "More Info: " + movieInfo["tomatoURL"] + "\n";
+            var outputText = "Movie Title: " + movieInfo.Title + "\n";
+            outputText += "Release Year: " + movieInfo.Year + "\n";
+            outputText += "Rated: " + movieInfo.Rated + "\n";
+            outputText += "Country of Origin: " + movieInfo.Country + "\n";
+            outputText += "Languages: " + movieInfo.Language + "\n";
+            outputText += "Plot: " + movieInfo.Plot + "\n";
+            outputText += "Actors: " + movieInfo.Actors + "\n";
+            outputText += "Rotten Tomatoes Rating: " + movieInfo.tomatoMeter + "\n";
+            outputText += "More Info: " + movieInfo.tomatoURL + "\n";
             outputText += "--------------------------\n";
             output(outputText);
         }
