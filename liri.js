@@ -8,8 +8,6 @@ var request = require("request");
 // keep keys private
 var keys = require("./keys.js");
 
-chooseCommand(liriCommand, secondArgument);
-
 function chooseCommand(command, argument){
     switch (command){
         case "spotify-this-song":
@@ -137,3 +135,6 @@ function output(text){
     console.log(text);
     fs.appendFile("log.txt", text + "\n");
 }
+
+
+chooseCommand(liriCommand, secondArgument);
